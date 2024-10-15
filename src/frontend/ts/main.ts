@@ -17,29 +17,7 @@ class Main implements EventListenerObject {
         } else if (idDelElemento === 'btnBuscar') {
             console.log("Buscando!")
             this.buscarDevices();
-        } else if (idDelElemento === 'btnLogin') {
-            console.log("login")
-            let iUser = this.recuperarElemento("userName");
-            let iPass = this.recuperarElemento("userPass");
-            let usuarioNombre: string = iUser.value;
-            let usuarioPassword: string = iPass.value;
-
-            if (usuarioNombre.length >= 4 && usuarioPassword.length >= 6) {
-                console.log("Voy al servidor... ejecuto consulta")
-                let usuario: Usuario = new Usuario(usuarioNombre, usuarioPassword);
-                let checkbox = this.recuperarElemento("cbRecor");
-
-                console.log(usuario, checkbox.checked);
-                iUser.disabled = true;
-                (<HTMLInputElement>object.target).disabled = true;
-                let divLogin = this.recuperarElemento("divLogin");
-                divLogin.hidden = true;
-            } else {
-                alert("El usuario o la contraseña son icorrectas");
-            }
-            //else captura cambio de switch
-        }
-        else if (object.target.nodeName == "INPUT") {
+        }else if (object.target.nodeName == "INPUT") {
             let input = <HTMLInputElement>object.target;
             //this.updateSwitch(idDelElemento, input.checked);
         }
