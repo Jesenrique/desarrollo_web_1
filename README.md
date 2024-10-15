@@ -15,7 +15,7 @@ Realizando estas tareas vas a a tener una aplicación fullstack IoT del mundo re
 
 En esta imagen podés ver una posible implementación del cliente web que controla los artefactos del hogar.
 
-![architecture](doc/webapp-example-1.png)
+![architecture](doc/proyecto.PNG)
 
 ## Comenzando 🚀
 
@@ -35,10 +35,10 @@ Continua con la descarga del código cuando tengas las dependencias instaladas y
 
 ### Descargar el código
 
-Para descargar el código, lo más conveniente es que realices un `fork` de este proyecto a tu cuenta personal haciendo click en [este link](https://github.com/gotoiot/app-fullstack-base/fork). Una vez que ya tengas el fork a tu cuenta, descargalo con este comando (acordate de poner tu usuario en el link):
+Para descargar el código, lo más conveniente es que realices un `fork` de este proyecto a tu cuenta personal haciendo click en [este link](https://github.com/Jesenrique/desarrollo_web_1.git/fork). Una vez que ya tengas el fork a tu cuenta, descargalo con este comando (acordate de poner tu usuario en el link):
 
 ```
-git clone https://github.com/USER/app-fullstack-base.git
+git clone https://github.com/USER/desarrollo_web_1.git
 ```
 
 > En caso que no tengas una cuenta en Github podes clonar directamente este repo.
@@ -154,45 +154,243 @@ En la siguiente ilustración podés ver cómo está organizado el proyecto para 
 
 En esta sección podés ver los detalles específicos de funcionamiento del código y que son los siguientes.
 
-<details><summary><b>Mira los detalles de implementación</b></summary><br>
-
-### Agregar un dispositivo
-
-Completá los pasos para agregar un dispositivo desde el cliente web.
+<details><summary><b>dDetalles de implementación</b></summary><br>
 
 ### Frontend
 
-Completá todos los detalles sobre cómo armaste el frontend, sus interacciones, etc.
+# Interacciones de Botones
+
+## Descripción de Botones y Funcionalidades
+
+### 1. **Agregar Dispositivo (addDeviceBtn)**
+- **Descripción**: Permite al usuario agregar un nuevo dispositivo.
+- **Interacción**: Al hacer clic en este botón, se abre un formulario donde el usuario puede ingresar el nombre, la descripción, el estado y el tipo del dispositivo. Una vez completado el formulario y enviado, se realiza una solicitud POST al servidor para agregar el nuevo dispositivo.
+
+### 2. **Buscar Dispositivos (btnBuscar)**
+- **Descripción**: Permite buscar y listar todos los dispositivos existentes en el sistema.
+- **Interacción**: Al hacer clic, se invoca la función `buscarDevices()`, que realiza una solicitud GET al servidor para obtener la lista actualizada de dispositivos. Los dispositivos se muestran en la interfaz en formato de tarjetas, cada una con opciones para editar y eliminar.
+
+### 3. **Editar (btnEdit)**
+- **Descripción**: Permite al usuario editar los detalles de un dispositivo.
+- **Interacción**: Al hacer clic en este botón, se envían los datos actualizados del dispositivo mediante una solicitud PUT al servidor. Si la actualización es exitosa, se muestra un mensaje de confirmación.
+
+### 4. **Eliminar (btnDelete)**
+- **Descripción**: Permite al usuario eliminar un dispositivo específico.
+- **Interacción**: Al hacer clic, se solicita una confirmación al usuario. Si el usuario confirma, se envía una solicitud DELETE al servidor para eliminar el dispositivo. Se muestra un mensaje de éxito o error según el resultado de la operación.
+
+### 5. **Switch para Estado del Dispositivo**
+- **Descripción**: Un interruptor que permite al usuario encender o apagar un dispositivo.
+- **Interacción**: Al cambiar el estado del interruptor, se envía una solicitud PUT al servidor para actualizar el estado del dispositivo (encendido o apagado). El estado actual del dispositivo se refleja automáticamente en la interfaz.
+
 
 ### Backend
 
-Completá todos los detalles de funcionamiento sobre el backend, sus interacciones con el cliente web, la base de datos, etc.
-
 <details><summary><b>Ver los endpoints disponibles</b></summary><br>
 
-Completá todos los endpoints del backend con los metodos disponibles, los headers y body que recibe, lo que devuelve, ejemplos, etc.
+# API de Dispositivos
 
-1) Devolver el estado de los dispositivos.
+Esta API permite gestionar dispositivos a través de operaciones GET, PUT, POST Y DELETE.
 
-```json
-{
-    "method": "get",
-    "request_headers": "application/json",
-    "request_body": "",
-    "response_code": 200,
-    "request_body": {
-        "devices": [
-            {
-                "id": 1,
-                "status": true,
-                "description": "Kitchen light"
-            }
-        ]
-    },
-}
-``` 
+## Endpoints
 
-</details>
+### 1. Obtener todos los dispositivos
+
+- **URL**: `/devices/`
+- **Method**: `GET`
+- **Headers**:
+    - `Content-Type: application/json`
+- **Body**: No requiere body.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+    ```json
+    [
+        {
+            "id": 1,
+            "name": "Dispositivo 1",
+            "description": "Descripción del dispositivo 1",
+            "state": true,
+            "type": "Tipo de dispositivo 1"
+        },
+        {
+            "id": 2,
+            "name": "Dispositivo 2",
+            "description": "Descripción del dispositivo 2",
+            "state": false,
+            "type": "Tipo de dispositivo 2"
+        }
+    ]
+    ```
+
+---
+
+### 2. Obtener un dispositivo por ID
+
+- **URL**: `/device/:id`
+- **Method**: `GET`
+- **Headers**:
+    - `Content-Type: application/json`
+- **Body**: No requiere body.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+    ```json
+    {
+        "id": 1,
+        "name": "Dispositivo 1",
+        "description": "Descripción del dispositivo 1",
+        "state": true,
+        "type": "Tipo de dispositivo 1"
+    }
+    ```
+- **Error Response**:
+    - **Status**: `409 Conflict`
+    - **Body**:
+    ```json
+    {
+        "error": "ID no válido"
+    }
+    ```
+
+---
+
+### 3. Eliminar un dispositivo
+
+- **URL**: `/device/`
+- **Method**: `DELETE`
+- **Headers**:
+    - `Content-Type: application/json`
+- **Body**:
+    ```json
+    {
+        "id": 1
+    }
+    ```
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+    ```json
+    {
+        "message": "Dispositivo eliminado correctamente"
+    }
+    ```
+- **Error Response**:
+    - **Status**: `409 Conflict`
+    - **Body**:
+    ```json
+    {
+        "error": "ID no válido"
+    }
+    ```
+
+---
+
+### 4. Insertar un nuevo dispositivo
+
+- **URL**: `/device/`
+- **Method**: `POST`
+- **Headers**:
+    - `Content-Type: application/json`
+- **Body**:
+    ```json
+    {
+        "name": "Dispositivo 1",
+        "description": "Descripción del dispositivo",
+        "state": true,
+        "type": "Sensor"
+    }
+    ```
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+    ```json
+    {
+        "message": "Dispositivo insertado correctamente",
+        "id": 1
+    }
+    ```
+- **Error Response**:
+    - **Status**: `409 Conflict`
+    - **Body**:
+    ```json
+    {
+        "error": "Error al insertar el dispositivo"
+    }
+    ```
+
+---
+
+### 5. Actualizar el estado de un dispositivo
+
+- **URL**: `/devices/`
+- **Method**: `PUT`
+- **Headers**:
+    - `Content-Type: application/json`
+- **Body**:
+    ```json
+    {
+        "id": 1,
+        "state": true
+    }
+    ```
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+    ```json
+    {
+        "message": "Estado del dispositivo actualizado correctamente"
+    }
+    ```
+- **Error Response**:
+    - **Status**: `409 Conflict`
+    - **Body**:
+    ```json
+    {
+        "error": "Error al actualizar el estado"
+    }
+    ```
+
+---
+
+### 6. Actualizar un dispositivo
+
+- **URL**: `/device/`
+- **Method**: `PUT`
+- **Headers**:
+    - `Content-Type: application/json`
+- **Body**:
+    ```json
+    {
+        "id": 1,
+        "name": "Nuevo nombre",
+        "description": "Nueva descripción"
+    }
+    ```
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+    ```json
+    {
+        "message": "Dispositivo actualizado correctamente"
+    }
+    ```
+- **Error Response**:
+    - **Status**: `409 Conflict`
+    - **Body**:
+    ```json
+    {
+        "error": "Error al actualizar el dispositivo"
+    }
+    ```
+
+---
+
+## Ejemplo de Solicitudes
+
+### GET `/devices/`
+```bash
+curl -X GET http://localhost:3000/devices/ -H "Content-Type: application/json"
+
 
 </details>
 
